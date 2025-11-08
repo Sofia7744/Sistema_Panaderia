@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Carrito - Panadería Delicia</title>
+  <link rel="stylesheet" href="carrito.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="hero">
+    <nav class="nav-bar">
+      <h1><a href="main.html">Panadería Delicia</a></h1>
+      <ul class="menu">
+        <li><a href="main.html">Inicio</a></li>
+        <li>
+          <a href="productos.html">Productos</a>
+          <ul class="submenu">
+            <li><a href="crud-productos.html">Control Productos</a></li>
+            <li><a href="crud-categorias.html">Control Categorias</a></li>
+          </ul>
+        </li>
+        <li><a href="promociones.html">Promociones</a></li>
+        <li>
+          <a href="#">Reservas</a>
+          <ul class="submenu">
+             <li><a href="reserva-nueva.html">Nueval carrito</a></li>
+             <li><a href="reserva-actual.html">Mis Reservas</a></li>
+          </ul>
+        </li>
+        <li><a href="gestion.html">Gestión</a></li>
+        <li><a href="metricas.html">Métricas</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="carrito.html">Ver 🛒</a></li>
+        <li><a href="#" class="btn-login">Iniciar Sesión</a></li>
+        <li><a href="#" id="btnCerrarSesionDirecto" style="display: none; color: var(--color-accent); font-weight: 600;">Cerrar sesión</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="main-content">
+    <section class="page-header">
+        <div class="container">
+            <h1>🛒 Mi Carrito</h1>
+            <p>Revisa y gestiona tus productos seleccionados</p>
+        </div>
+    </section>
+
+    <!-- Carrito -->
+    <section id="carrito" class="carrito-container">
+      <div class="carrito-content">
+        <div class="carrito-header">
+          <h2>Productos en tu carrito</h2>
+        </div>
+        
+        <div id="carrito-items" class="carrito-items">
+          <!-- Los productos del carrito se cargarán aquí dinámicamente -->
+        </div>
+        
+        <div class="carrito-resumen">
+          <div class="resumen-detalle">
+            <div class="resumen-linea">
+              <span>Subtotal:</span>
+              <span id="subtotal">S/0.00</span>
+            </div>
+            <div class="resumen-linea">
+              <span>Envío:</span>
+              <span id="envio">S/0.00</span>
+            </div>
+            <div class="resumen-linea total">
+              <span>Total:</span>
+              <span id="total">S/0.00</span>
+            </div>
+          </div>
+          
+          <div class="carrito-acciones">
+            <button id="btn-vaciar-carrito" class="btn btn-vaciar">Vaciar Carrito</button>
+            <button id="btn-finalizar-compra" class="btn btn-pagar">Finalizar Compra</button>
+          </div>
+        </div>
+        
+        <div id="carrito-vacio" class="carrito-vacio" style="display: none;">
+          <div class="vacio-content">
+            <h3>Tu carrito está vacío</h3>
+            <p>¡Descubre nuestros deliciosos productos!</p>
+            <a href="productos.html" class="btn btn-primary">Ver Productos</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Productos Sugeridos -->
+    <section class="productos-sugeridos">
+      <div class="container">
+        <h2>Productos que podrían gustarte</h2>
+        <div class="grid-productos">
+          <div class="item card">
+            <img src="img/pionono-de-vainilla.jpg" alt="Pionono de vainilla">
+            <h3>Pionono de Vainilla</h3>
+            <p>S/24.00</p>
+            <button class="btn-add-cart" data-nombre="Pionono de Vainilla" data-precio="24">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/pan-frances.jpg" alt="Pan Frances">
+            <h3>Pan Frances</h3>
+            <p>S/2.00</p>
+            <button class="btn-add-cart" data-nombre="Pan Frances" data-precio="2.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/torta-selva-negra.jPG" alt="Torta selva negra">
+            <h3>Torta Selva Negra</h3>
+            <p>S/58.00</p>
+            <button class="btn-add-cart" data-nombre="Torta Selva Negra" data-precio="58.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/pizza-todas-las-carnes.jpg" alt="Pizza Todas las carnes">
+            <h3>Pizza de Carne</h3>
+            <p>S/41.00</p>
+            <button class="btn-add-cart" data-nombre="Pizza de Carne" data-precio="41.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/pionono-de-chocolate.jpg" alt="Pionono de chocolate">
+            <h3>Pionono de Chocolate</h3>
+            <p>S/24.00</p>
+            <button class="btn-add-cart" data-nombre="Pionono de Chocolate" data-precio="24.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/torta-helada.jpg" alt="Torta Helada">
+            <h3>Torta Helada</h3>
+            <p>S/45.00</p>
+            <button class="btn-add-cart" data-nombre="Torta Helada" data-precio="45.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/pionono-de-vainilla.jpg" alt="Pionono de vainilla">
+            <h3>Pionono de Vainilla</h3>
+            <p>S/24.00</p>
+            <button class="btn-add-cart" data-nombre="Pionono de vainilla" data-precio="24.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/pan-de-anis.jpg" alt="Pan de Anís">
+            <h3>Pan de Anís</h3>
+            <p>S/2.00</p>
+            <button class="btn-add-cart" data-nombre="Pan de Anís" data-precio="2.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/torta-de-maracuya.jpg" alt="Torta de maracuya">
+            <h3>Torta de Maracuyá</h3>
+            <p>S/56.00</p>
+            <button class="btn-add-cart" data-nombre="Torta de maracuya" data-precio="56.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/pizza-romana.jpg" alt="Pizza Romana">
+            <h3>Pizza Romana</h3>
+            <p>S/32.00</p>
+            <button class="btn-add-cart" data-nombre="Pizza Romana" data-precio="32.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/pionono-dulce-de-fresa.jpg" alt="Pionono de fresa">
+            <h3>Pionono de Fresa</h3>
+            <p>S/24.00</p>
+            <button class="btn-add-cart" data-nombre="Pionono de Fresa" data-precio="24.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/bizcocho-de-vainilla.jpg" alt="Bizcocho de Vainilla">
+            <h3>Bizcocho de Vinilla</h3>
+            <p>S/35.00</p>
+            <button class="btn-add-cart" data-nombre="Bizcocho de Vainilla" data-precio="35.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/pizza-americana.jpg" alt="Pizza Americana">
+            <h3>Pizza Americana</h3>
+            <p>S/30.00</p>
+            <button class="btn-add-cart" data-nombre="Pizza Americana" data-precio="30.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/bizcocho-de-chocolate.jpg" alt="Bizcocho de Chocolate">
+            <h3>Bizcocho de Chocolate</h3>
+            <p>S/35.00</p>
+            <button class="btn-add-cart" data-nombre="Bizcocho de Chocolate" data-precio="35.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/pionono-de-moka.png" alt="Pionono de Moka">
+            <h3>Pionono de Moka</h3>
+            <p>S/25.00</p>
+            <button class="btn-add-cart" data-nombre="Pionono de Moka" data-precio="25.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/pie-de-piña.jpg" alt="Pye de Piña">
+            <h3>Pye de Piña</h3>
+            <p>S/38.00</p>
+            <button class="btn-add-cart" data-nombre="Pye de Piña" data-precio="38.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/torta-opera.jpg" alt="Torta Opera">
+            <h3>Torta Opera</h3>
+            <p>S/95.00</p>
+            <button class="btn-add-cart" data-nombre="Torta Opera" data-precio="95.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/pan-de-trigo.jpg" alt="Pan de Trigo">
+            <h3>Pan de Trigo</h3>
+            <p>S/2.00</p>
+            <button class="btn-add-cart" data-nombre="Pan de Trigo" data-precio="2.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/bizcocho-de-piña.jpg" alt="Bizcocho de Piña">
+            <h3>Bizcocho de Piña</h3>
+            <p>S/35.00</p>
+            <button class="btn-add-cart" data-nombre="Bizcocho de Piña" data-precio="35.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/torta-tres-leches.jpg" alt="Torta Tres Leches">
+            <h3>Torta Tres Leches</h3>
+            <p>S/60.00</p>
+            <button class="btn-add-cart" data-nombre="Torta Tres Leches" data-precio="60.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/pie-de-manzana.jpg" alt="Pye de manzana">
+            <h3>Pye de Manzana</h3>
+            <p>S/38.00</p>
+            <button class="btn-add-cart" data-nombre="Pye de manzana" data-precio="38.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/pizza-pepperoni-mariscos.jpg" alt="Pizza Pepperoni/Mariscos">
+            <h3>Pizza Pepperiscos</h3>
+            <p>S/40.00</p>
+            <button class="btn-add-cart" data-nombre="Pizza Pepperoni/Mariscos" data-precio="40.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/torta-tres-leches-chocolate.jpg" alt="Torta Tres Leches Chocolate">
+            <h3>Torta Tres Leches Chocolate</h3>
+            <p>S/60.00</p>
+            <button class="btn-add-cart" data-nombre="Torta Tres Leches Chocolate" data-precio="60.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/pie-de-limon.jpg" alt="Pye de Limón">
+            <h3>Pye de Limón</h3>
+            <p>S/38.00</p>
+            <button class="btn-add-cart" data-nombre="Pye de Limón" data-precio="38.00">Añadir al carrito</button>
+          </div>
+          <div class="item card">
+            <img src="img/torta-one-piece.jpg" alt="Torta One Piece">
+            <h3>Torta One Piece</h3>
+            <p>S/100.00</p>
+            <button class="btn-add-cart" data-nombre="Torta One Piece" data-precio="100.00">Añadir al carrito</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="contact">
+        <h3>Contacto</h3>
+        <div class="footer-links">
+          <a href="tel:987654321">987 654 321</a>
+          <a href="mailto:panaderiadelicia@gmail.com">panaderiadelicia@gmail.com</a>
+        </div>
+      </div>
+      <div class="redes">
+        <h3>Síguenos en</h3>
+        <div class="footer-links">
+          <a href="#" target="_blank">Facebook</a>
+          <a href="#" target="_blank">Instagram</a>
+          <a href="#" target="_blank">WhatsApp</a>
+        </div>
+      </div>
+      <div class="explora">
+        <h3>Explora</h3>
+        <div class="footer-links">
+          <a href="main.html">Inicio</a>
+          <a href="productos.html">Productos</a>
+          <a href="promociones.html">Promociones</a>
+          <a href="reserva-nueva.html">Reservas</a>
+          <a href="nosotros.html">Nosotros</a>
+          <a href="carrito.html">Carrito</a>
+        </div>
+      </div>
+    </div>
+    <p class="copy">&copy; 2025 Panadería Delicia. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Modal Carrito -->
+  <div id="modalCarrito" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar">&times;</span>
+      <h2>Carrito de Compras</h2>
+      <div id="carrito-items-modal">
+        <!-- Los productos del carrito se cargarán aquí dinámicamente -->
+      </div>
+      <hr>
+      <p id="total-modal">Total: S/0.00</p>
+      <button id="btn-vaciar-carrito-modal">Vaciar Carrito</button>
+      <button id="btn-finalizar-compra-modal">Finalizar Compra</button>
+    </div>
+  </div>
+
+  <!-- Modal Login -->
+  <div id="modalLogin" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar">&times;</span>
+      <div class="modal-tabs">
+        <button class="tab-btn active" data-tab="login-tab">Iniciar Sesión</button>
+        <button class="tab-btn" data-tab="registro-tab">Registrarse</button>
+      </div>
+      
+      <div id="login-tab" class="tab-content active">
+        <form id="form-login" class="form-login">
+          <div class="form-group">
+            <label for="login-email">Correo electrónico</label>
+            <input type="email" id="login-email" placeholder="Ingresa tu correo electrónico" required>
+          </div>
+          <div class="form-group">
+            <label for="login-password">Contraseña</label>
+            <input type="password" id="login-password" placeholder="Ingresa tu contraseña" required>
+            <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" id="remember-me">
+            <label for="remember-me">Recordarme</label>
+          </div>
+          <button type="submit" class="btn-submit">Ingresar</button>
+        </form>
+      </div>
+      
+      <div id="registro-tab" class="tab-content">
+        <form id="form-registro" class="form-registro">
+          <div class="form-group">
+            <label for="registro-nombre">Nombre completo</label>
+            <input type="text" id="registro-nombre" placeholder="Ingresa tu nombre completo" required>
+          </div>
+          <div class="form-group">
+            <label for="registro-email">Correo electrónico</label>
+            <input type="email" id="registro-email" placeholder="Ingresa tu correo electrónico" required>
+          </div>
+          <div class="form-group">
+            <label for="registro-password">Contraseña</label>
+            <input type="password" id="registro-password" placeholder="Crea una contraseña" required>
+          </div>
+          <div class="form-group">
+            <label for="registro-password-confirm">Confirmar contraseña</label>
+            <input type="password" id="registro-password-confirm" placeholder="Confirma tu contraseña" required>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" id="terminos" required>
+            <label for="terminos">Acepto los términos y condiciones</label>
+          </div>
+          <button type="submit" class="btn-submit">Crear cuenta</button>
+        </form>
+      </div>
+      
+      <div class="social-login">
+        <p>O inicia sesión con</p>
+        <div class="social-buttons">
+          <button class="btn-social facebook">Facebook</button>
+          <button class="btn-social google">Google</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal Método de Pago -->
+  <div id="modalMetodoPago" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar">&times;</span>
+      <h2>Método de Pago</h2>
+      <p>Selecciona tu método de pago preferido:</p>
+      
+      <div class="metodos-pago">
+        <div class="metodo-pago">
+          <input type="radio" id="tarjeta" name="metodo-pago" value="tarjeta" checked>
+          <label for="tarjeta">Tarjeta de Crédito/Débito</label>
+        </div>
+        
+        <div class="metodo-pago">
+          <input type="radio" id="yape" name="metodo-pago" value="yape">
+          <label for="yape">Yape</label>
+        </div>
+        
+        <div class="metodo-pago">
+          <input type="radio" id="efectivo" name="metodo-pago" value="efectivo">
+          <label for="efectivo">Pago en Efectivo</label>
+        </div>
+      </div>
+      
+      <!-- Contenedor para formularios según método de pago -->
+      <div id="formulario-pago-container">
+        <!-- Por defecto mostramos el formulario de tarjeta -->
+        <div id="form-tarjeta" class="form-pago active">
+          <div class="form-group">
+            <label for="nombre-tarjeta">Nombre en la tarjeta</label>
+            <input type="text" id="nombre-tarjeta" placeholder="Nombre como aparece en la tarjeta" required>
+          </div>
+          <div class="form-group">
+            <label for="numero-tarjeta">Número de tarjeta</label>
+            <input type="text" id="numero-tarjeta" placeholder="XXXX XXXX XXXX XXXX" maxlength="16" required>
+          </div>
+          <div class="form-group" style="display: flex; gap: 10px;">
+            <div style="flex: 1;">
+              <label for="fecha-expiracion">Fecha de expiración</label>
+              <input type="month" id="fecha-expiracion" required>
+            </div>
+            <div style="width: 80px;">
+              <label for="cvv">CVV</label>
+              <input type="text" id="cvv" placeholder="XXX" maxlength="3" required>
+            </div>
+          </div>
+        </div>
+        
+        <div id="form-yape" class="form-pago">
+          <div class="form-group">
+            <p>Escanea el siguiente código QR con la app Yape:</p>
+            <div style="width: 200px; height: 200px; margin: 20px auto; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center; border: 1px dashed #ccc;">
+              [Código QR Yape]
+            </div>
+            <p>O realiza el pago al número: <strong>987-654-321</strong></p>
+          </div>
+          <div class="form-group">
+            <label for="yape-numero">Tu número de celular</label>
+            <input type="text" id="yape-numero" placeholder="Ingresa tu número de Yape" required>
+          </div>
+        </div>
+        
+        <div id="form-efectivo" class="form-pago">
+          <div class="form-group">
+            <p>Has seleccionado pago en efectivo. Pagarás al momento de recibir tu pedido.</p>
+            <div class="form-group">
+              <label for="direccion-entrega">Dirección de entrega</label>
+              <input type="text" id="direccion-entrega" placeholder="Ingresa tu dirección completa" required>
+            </div>
+            <div class="form-group">
+              <label for="referencia-entrega">Referencia</label>
+              <input type="text" id="referencia-entrega" placeholder="Casa azul, cerca a la farmacia, etc.">
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <button id="btn-confirmar-pago" class="btn-submit">Confirmar Pago</button>
+    </div>
+  </div>
+
+  <!-- Modal Cerrar Sesión -->
+  <div id="modalCerrarSesion" class="modal">
+    <div class="modal-contenido modal-small">
+      <span class="cerrar">&times;</span>
+      <h3>Cerrar Sesión</h3>
+      <p>¿Estás seguro que deseas cerrar tu sesión?</p>
+      <div class="modal-buttons">
+        <button id="btn-cancelar-logout" class="btn-secondary">Cancelar</button>
+        <button id="btn-confirmar-logout" class="btn-primary">Cerrar Sesión</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menú de usuario -->
+  <div id="menuUsuario" class="menu-usuario" style="display: none;">
+    <div class="usuario-header">
+      <div id="nombreUsuario">Usuario</div>
+      <span class="cerrar-menu">&times;</span>
+    </div>
+    <ul>
+      <li><a href="#">Mi perfil</a></li>
+      <li><a href="#">Mis pedidos</a></li>
+      <li><a href="#">Mis favoritos</a></li>
+      <li><a href="#" id="cerrar-sesion">Cerrar sesión</a></li>
+    </ul>
+  </div>
+
+  <!-- Botón flotante para el carrito -->
+  <button class="btn-nav" id="btn-mostrar-carrito" style="display: none;">🛒</button>
+
+  <!-- Notificación -->
+  <div id="notificacion" class="notificacion" style="display: none;"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

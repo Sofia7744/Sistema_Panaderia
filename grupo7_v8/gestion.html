@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Panadería Delicia</title>
+  <meta name="description" content="Panadería Delicia: el sabor que te acompaña cada día.">
+  <link rel="stylesheet" href="gestion.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="hero">
+    <nav class="nav-bar">
+      <h1><a href="main.html">Panadería Delicia</a></h1>
+      <ul class="menu">
+        <li><a href="main.html">Inicio</a></li>
+        <li>
+          <a href="productos.html">Productos</a>
+          <ul class="submenu">
+            <li><a href="crud-productos.html">Control Productos</a></li>
+            <li><a href="crud-categorias.html">Control Categorias</a></li>
+          </ul>
+        </li>
+        <li><a href="promociones.html">Promociones</a></li>
+        <li>
+          <a href="#">Reservas</a>
+          <ul class="submenu">
+             <li><a href="reserva-nueva.html">Nueva Reserva</a></li>
+             <li><a href="reserva-actual.html">Mis Reservas</a></li>
+          </ul>
+        </li>
+        <li><a href="gestion.html">Gestión</a></li>
+        <li><a href="metricas.html">Métricas</a></li>
+        <li><a href="nosotros.html">Nosotros</a></li>
+        <li><a href="carrito.html">Ver 🛒</a></li>
+        <li><a href="#" class="btn-login">Iniciar Sesión</a></li>
+        <li><a href="#" id="btnCerrarSesionDirecto" style="display: none; color: var(--color-accent); font-weight: 600;">Cerrar sesión</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="main-content">
+        <section class="page-header">
+            <div class="container">
+                <h1>Gestión de Reservas</h1>
+                <p>Administra y actualiza el estado de las reservas</p>
+            </div>
+        </section>
+
+        <section class="gestion-section">
+            <div class="container">
+                <!-- Filtros -->  
+                <div class="gestion-filters">
+                    <button class="filter-btn active" data-estado="">Todas</button>
+                    <button class="filter-btn" data-estado="pendiente">Pendientes</button>
+                    <button class="filter-btn" data-estado="confirmada">Confirmadas</button>
+                    <button class="filter-btn" data-estado="lista">Listas</button>
+                    <button class="filter-btn" data-estado="entregada">Entregadas</button>
+                    <button class="filter-btn" data-estado="cancelada">Canceladas</button>
+                </div>
+
+                <!-- Tabla de Reservas -->  
+                <div class="table-container">
+                  <table class="gestion-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Apellidos</th> <!-- CORREGIDO -->
+                            <th>Teléfono</th>
+                            <th>Fecha Recojo</th>
+                            <th>Hora</th>
+                            <th>Total</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reservasTableBody">
+                        <!-- Las reservas se cargarán dinámicamente -->
+                        <tr>
+                            <td><strong>#1</strong></td>
+                            <td>Juan</td>
+                            <td>Arrollo</td> <!-- Esto coincide ahora con "Apellidos" -->
+                            <td>123456789</td>
+                            <td>30/09/2025</td>
+                            <td>10:00</td>
+                            <td><strong>S/ 100.00</strong></td>
+                            <td>
+                                <span class="reserva-estado-badge bg-green-100 text-green-800">PENDIENTE</span>
+                            </td>
+                            <td>
+                                <div>
+                                    <button class="btn-icon btn-view">Ver</button>
+                                    <button class="btn-icon btn-estado">Estado</button>
+                                </div>
+                            </td>
+                        </tr>
+                          <tr>
+                            <td>
+                              <strong>#2</strong>
+                            </td>
+                            <td>Maria</td>
+                            <td>Quijada</td>
+                            <td>987654321</td>
+                            <td>01/10/2025</td>
+                            <td>11:00</td>
+                            <td>
+                              <strong>S/ 200.00</strong>
+                            </td>
+                            <td>
+                              <span class="reserva-estado-badge bg-green-100 text-green-800">CONFIRMADA</span>
+                            </td>
+                            <td>
+                              <div>
+                                <button class="btn-icon btn-view">
+                                  Ver
+                                </button>
+                                <button class="btn-icon btn-estado">
+                                  Estado
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <strong>#3</strong>
+                            </td>
+                            <td>Juan</td>
+                            <td>Perez</td>
+                            <td>123456789</td>
+                            <td>30/09/2025</td>
+                            <td>10:00</td>
+                            <td>
+                              <strong>S/ 100.00</strong>
+                            </td>
+                            <td>
+                              <span class="reserva-estado-badge bg-green-100 text-green-800">LISTA</span>
+                            </td>
+                            <td>
+                              <div>
+                                <button class="btn-icon btn-view">
+                                  Ver
+                                </button>
+                                <button class="btn-icon btn-estado">
+                                  Estado
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <strong>#4</strong>
+                            </td>
+                            <td>Maria</td>
+                            <td>Rodriguez</td>
+                            <td>987654321</td>
+                            <td>01/10/2025</td>
+                            <td>11:00</td>
+                            <td>
+                              <strong>S/ 200.00</strong>
+                            </td>
+                            <td>
+                              <span class="reserva-estado-badge bg-green-100 text-green-800">CANCELADA</span>
+                            </td>
+                            <td>
+                              <div>
+                                <button class="btn-icon btn-view">
+                                  Ver
+                                </button>
+                                <button class="btn-icon btn-estado">
+                                  Estado
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <strong>#5</strong>
+                            </td>
+                            <td>Maria</td>
+                            <td>Arrieta</td>
+                            <td>987654321</td>
+                            <td>01/10/2025</td>
+                            <td>11:00</td>
+                            <td>
+                              <strong>S/ 200.00</strong>
+                            </td>
+                            <td>
+                              <span class="reserva-estado-badge bg-green-100 text-green-800">ENTREGADA</span>
+                            </td>
+                            <td>
+                              <div>
+                                <button class="btn-icon btn-view">
+                                  Ver
+                                </button>
+                                <button class="btn-icon btn-estado">
+                                  Estado
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <strong>#6</strong>
+                            </td>
+                            <td>Juan</td>
+                            <td>Rojas</td>
+                            <td>123456789</td>
+                            <td>30/09/2025</td>
+                            <td>10:00</td>
+                            <td>
+                              <strong>S/ 100.00</strong>
+                            </td>
+                            <td>
+                              <span class="reserva-estado-badge bg-green-100 text-green-800">PENDIENTE</span>
+                            </td>
+                            <td>
+                              <div>
+                                <button class="btn-icon btn-view">
+                                  Ver
+                                </button>
+                                <button class="btn-icon btn-estado">
+                                  Estado
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <strong>#7</strong>
+                            </td>
+                            <td>Maria</td>
+                            <td>Chancas</td>
+                            <td>987654321</td>
+                            <td>01/10/2025</td>
+                            <td>11:00</td>
+                            <td>
+                              <strong>S/ 200.00</strong>
+                            </td>
+                            <td>
+                              <span class="reserva-estado-badge bg-green-100 text-green-800">CONFIRMADA</span>
+                            </td>
+                            <td>
+                              <div>
+                                <button class="btn-icon btn-view">
+                                  Ver
+                                </button>
+                                <button class="btn-icon btn-estado">
+                                  Estado
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <strong>#8</strong>
+                            </td>
+                            <td>Juan</td>
+                            <td>Ramos</td>
+                            <td>123456789</td>
+                            <td>30/09/2025</td>
+                            <td>10:00</td>
+                            <td>
+                              <strong>S/ 100.00</strong>
+                            </td>
+                            <td>
+                              <span class="reserva-estado-badge bg-green-100 text-green-800">LISTA</span>
+                            </td>
+                            <td>
+                              <div>
+                                <button class="btn-icon btn-view">
+                                  Ver
+                                </button>
+                                <button class="btn-icon btn-estado">
+                                  Estado
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <strong>#9</strong>
+                            </td>
+                            <td>Maria</td>
+                            <td>Sanchez</td>
+                            <td>987654321</td>
+                            <td>01/10/2025</td>
+                            <td>11:00</td>
+                            <td>
+                              <strong>S/ 200.00</strong>
+                            </td>
+                            <td>
+                              <span class="reserva-estado-badge bg-green-100 text-green-800">CANCELADA</span>
+                            </td>
+                            <td>
+                              <div>
+                                <button class="btn-icon btn-view">
+                                  Ver
+                                </button>
+                                <button class="btn-icon btn-estado">
+                                  Estado
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td>
+                              <strong>#10</strong>
+                            </td>
+                            <td>Maria</td>
+                            <td>Limas</td>
+                            <td>987654321</td>
+                            <td>01/10/2025</td>
+                            <td>11:00</td>
+                            <td>
+                              <strong>S/ 200.00</strong>
+                            </td>
+                            <td>
+                              <span class="reserva-estado-badge bg-green-100 text-green-800">ENTREGADA</span>
+                            </td>
+                            <td>
+                              <div>
+                                <button class="btn-icon btn-view">
+                                  Ver
+                                </button>
+                                <button class="btn-icon btn-estado">
+                                  Estado
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                    </table>
+                </div>
+              <!-- Funciona cuando no hay reservas
+                <div id="emptyState" class="empty-state hidden">
+                    <p>No hay reservas para mostrar</p>
+                </div> -->
+            </div>
+        </section>
+    </main>
+
+<!-- Modal de Cambio de Estado --> 
+<div id="estadoModal" class="modal hidden">
+  <div class="modal-overlay"></div>
+  <div class="modal-content modal-estado">
+      <button class="modal-close" id="closeEstadoModal">&times;</button>
+      <div class="modal-header">
+          <h2>Cambiar Estado de Reserva</h2>
+      </div>
+      <div class="modal-body">
+          <p>Reserva #<span id="reservaIdModal"></span></p>
+          <div class="estado-options">
+              <button class="estado-option" data-estado="pendiente">
+                  <span class="estado-icon">⏳</span>
+                  <span>Pendiente</span>
+              </button>
+              <button class="estado-option" data-estado="confirmada">
+                  <span class="estado-icon">✓</span>
+                  <span>Confirmada</span>
+              </button>
+              <button class="estado-option" data-estado="lista">
+                  <span class="estado-icon">📦</span>
+                  <span>Lista para Recoger</span>
+              </button>
+              <button class="estado-option" data-estado="entregada">
+                  <span class="estado-icon">✓✓</span>
+                  <span>Entregada</span>
+              </button>
+              <button class="estado-option" data-estado="cancelada">
+                  <span class="estado-icon">✗</span>
+                  <span>Cancelada</span>
+              </button>
+          </div>
+      </div>
+  </div>
+</div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="contact">
+        <h3>Contacto</h3>
+        <div class="footer-links">
+          <a href="tel:987654321">987 654 321</a>
+          <a href="mailto:panaderiadelicia@gmail.com">panaderiadelicia@gmail.com</a>
+        </div>
+      </div>
+      <div class="redes">
+        <h3>Síguenos en</h3>
+        <div class="footer-links">
+          <a href="#" target="_blank">Facebook</a>
+          <a href="#" target="_blank">Instagram</a>
+          <a href="#" target="_blank">WhatsApp</a>
+        </div>
+      </div>
+      <div class="explora">
+        <h3>Explora</h3>
+        <div class="footer-links">
+          <a href="main.html">Inicio</a>
+          <a href="productos.html">Productos</a>
+          <a href="promociones.html">Promociones</a>
+          <a href="reserva-nueva.html">Reservas</a>
+          <a href="nosotros.html">Nosotros</a>
+          <a href="carrito.html">Carrito</a>
+        </div>
+      </div>
+    </div>
+    <p class="copy">&copy; 2025 Panadería Delicia. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Modal Login -->
+  <div id="modalLogin" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar">&times;</span>
+      <div class="modal-tabs">
+        <button class="tab-btn active" data-tab="login-tab">Iniciar Sesión</button>
+        <button class="tab-btn" data-tab="registro-tab">Registrarse</button>
+      </div>
+      
+      <div id="login-tab" class="tab-content active">
+        <form id="form-login" class="form-login">
+          <div class="form-group">
+            <label for="login-email">Correo electrónico</label>
+            <input type="email" id="login-email" placeholder="Ingresa tu correo electrónico" required>
+          </div>
+          <div class="form-group">
+            <label for="login-password">Contraseña</label>
+            <input type="password" id="login-password" placeholder="Ingresa tu contraseña" required>
+            <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" id="remember-me">
+            <label for="remember-me">Recordarme</label>
+          </div>
+          <button type="submit" class="btn-submit">Ingresar</button>
+        </form>
+      </div>
+      
+      <div id="registro-tab" class="tab-content">
+        <form id="form-registro" class="form-registro">
+          <div class="form-group">
+            <label for="registro-nombre">Nombre completo</label>
+            <input type="text" id="registro-nombre" placeholder="Ingresa tu nombre completo" required>
+          </div>
+          <div class="form-group">
+            <label for="registro-email">Correo electrónico</label>
+            <input type="email" id="registro-email" placeholder="Ingresa tu correo electrónico" required>
+          </div>
+          <div class="form-group">
+            <label for="registro-password">Contraseña</label>
+            <input type="password" id="registro-password" placeholder="Crea una contraseña" required>
+          </div>
+          <div class="form-group">
+            <label for="registro-password-confirm">Confirmar contraseña</label>
+            <input type="password" id="registro-password-confirm" placeholder="Confirma tu contraseña" required>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" id="terminos" required>
+            <label for="terminos">Acepto los términos y condiciones</label>
+          </div>
+          <button type="submit" class="btn-submit">Crear cuenta</button>
+        </form>
+      </div>
+      
+      <div class="social-login">
+        <p>O inicia sesión con</p>
+        <div class="social-buttons">
+          <button class="btn-social facebook">Facebook</button>
+          <button class="btn-social google">Google</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Carrito -->
+  <div id="modalCarrito" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar">&times;</span>
+      <h2>Carrito de Compras</h2>
+      <div id="carrito-items">
+        <!-- Los productos del carrito se cargarán aquí dinámicamente -->
+      </div>
+      <hr>
+      <p id="total">Total: S/0.00</p>
+      <button id="btn-vaciar-carrito">Vaciar Carrito</button>
+      <button id="btn-finalizar-compra">Finalizar Compra</button>
+    </div>
+  </div>
+
+  <!-- Menú de usuario -->
+  <div id="menuUsuario" class="menu-usuario" style="display: none;">
+    <div class="usuario-header">
+      <div id="nombreUsuario">Usuario</div>
+      <span class="cerrar-menu">&times;</span>
+    </div>
+    <ul>
+      <li><a href="#">Mi perfil</a></li>
+      <li><a href="#">Mis pedidos</a></li>
+      <li><a href="#">Mis favoritos</a></li>
+      <li><a href="#" id="cerrar-sesion">Cerrar sesión</a></li>
+    </ul>
+  </div>
+
+  <!-- Botón flotante para el carrito -->
+  <button class="btn-nav" id="btn-mostrar-carrito" style="display: none;">🛒</button>
+  <!-- Modal Cerrar Sesión -->
+  <div id="modalCerrarSesion" class="modal">
+    <div class="modal-contenido modal-small">
+      <span class="cerrar">&times;</span>
+      <h3>Cerrar Sesión</h3>
+      <p>¿Estás seguro que deseas cerrar tu sesión?</p>
+      <div class="modal-buttons">
+        <button id="btn-cancelar-logout" class="btn-secondary">Cancelar</button>
+        <button id="btn-confirmar-logout" class="btn-primary">Cerrar Sesión</button>
+      </div>
+    </div>
+  </div>
+<!-- Modal Método de Pago -->
+<div id="modalMetodoPago" class="modal">
+  <div class="modal-contenido">
+    <span class="cerrar">&times;</span>
+    <h2>Método de Pago</h2>
+    <p>Selecciona tu método de pago preferido:</p>
+    
+    <div class="metodos-pago">
+      <div class="metodo-pago">
+        <input type="radio" id="tarjeta" name="metodo-pago" value="tarjeta" checked>
+        <label for="tarjeta">Tarjeta de Crédito/Débito</label>
+      </div>
+      
+      <div class="metodo-pago">
+        <input type="radio" id="yape" name="metodo-pago" value="yape">
+        <label for="yape">Yape</label>
+      </div>
+      
+      <div class="metodo-pago">
+        <input type="radio" id="efectivo" name="metodo-pago" value="efectivo">
+        <label for="efectivo">Pago en Efectivo</label>
+      </div>
+    </div>
+    
+    <!-- Contenedor para formularios según método de pago -->
+    <div id="formulario-pago-container">
+      <!-- Por defecto mostramos el formulario de tarjeta -->
+      <div id="form-tarjeta" class="form-pago active">
+        <div class="form-group">
+          <label for="nombre-tarjeta">Nombre en la tarjeta</label>
+          <input type="text" id="nombre-tarjeta" placeholder="Nombre como aparece en la tarjeta" required>
+        </div>
+        <div class="form-group">
+          <label for="numero-tarjeta">Número de tarjeta</label>
+          <input type="text" id="numero-tarjeta" placeholder="XXXX XXXX XXXX XXXX" maxlength="16" required>
+        </div>
+        <div class="form-group" style="display: flex; gap: 10px;">
+          <div style="flex: 1;">
+            <label for="fecha-expiracion">Fecha de expiración</label>
+            <input type="month" id="fecha-expiracion" required>
+          </div>
+          <div style="width: 80px;">
+            <label for="cvv">CVV</label>
+            <input type="text" id="cvv" placeholder="XXX" maxlength="3" required>
+          </div>
+        </div>
+      </div>
+      
+      <div id="form-yape" class="form-pago">
+        <div class="form-group">
+          <p>Escanea el siguiente código QR con la app Yape:</p>
+          <div style="width: 200px; height: 200px; margin: 20px auto; background-color: #f5f5f5; display: flex; align-items: center; justify-content: center; border: 1px dashed #ccc;">
+            [Código QR Yape]
+          </div>
+          <p>O realiza el pago al número: <strong>987-654-321</strong></p>
+        </div>
+        <div class="form-group">
+          <label for="yape-numero">Tu número de celular</label>
+          <input type="text" id="yape-numero" placeholder="Ingresa tu número de Yape" required>
+        </div>
+      </div>
+      
+      <div id="form-efectivo" class="form-pago">
+        <div class="form-group">
+          <p>Has seleccionado pago en efectivo. Pagarás al momento de recibir tu pedido.</p>
+          <div class="form-group">
+            <label for="direccion-entrega">Dirección de entrega</label>
+            <input type="text" id="direccion-entrega" placeholder="Ingresa tu dirección completa" required>
+          </div>
+          <div class="form-group">
+            <label for="referencia-entrega">Referencia</label>
+            <input type="text" id="referencia-entrega" placeholder="Casa azul, cerca a la farmacia, etc.">
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <button id="btn-confirmar-pago" class="btn-submit">Confirmar Pago</button>
+  </div>
+</div>
+  <script src="script.js"></script>
+</body>
+</html>
