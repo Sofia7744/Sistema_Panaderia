@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Categorías - Panadería Delicia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .status-badge {
+            font-size: 0.8em;
+        }
+        .table-actions {
+            white-space: nowrap;
+        }
+        .search-box {
+            max-width: 300px;
+        }
+        .category-card {
+            border-left: 4px solid #0d6efd;
+            transition: transform 0.2s;
+        }
+        .category-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-bread-slice"></i> Panadería Delicia
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/productos}">Productos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/promociones}">Promociones</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="compraDropdown" role="button" data-bs-toggle="dropdown">
+                        Compra
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/nueva-compra}">Nueva Compra</a></li>
+                        <li><a class="dropdown-item" th:href="@{/mis-compras}">Mis Compras</a></li>
+                    </ul>
+                </li>
+                <!-- Menú para Personal -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle active text-warning" href="#" id="gestionDropdown" role="button" data-bs-toggle="dropdown">
+                        Gestión
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/gestion-productos}">Productos</a></li>
+                        <li><a class="dropdown-item active" th:href="@{/gestion-categorias}">Categorías</a></li>
+                        <li><a class="dropdown-item" th:href="@{/gestion-usuarios}">Usuarios</a></li>
+                        <li><a class="dropdown-item" th:href="@{/gestion-compras}">Compras</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-info" th:href="@{/metricas}">Métricas</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user"></i> <span th:text="${usuario != null ? usuario.nombre : 'Personal'}">Personal</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/mi-perfil}">Mi Perfil</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenido Principal -->
+<div class="container mt-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-tags"></i> Gestión de Categorías</h1>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevaCategoriaModal">
+            <i class="fas fa-plus"></i> Nueva Categoría
+        </button>
+    </div>
+
+    <!-- Filtros y Búsqueda -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Buscar categorías...">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <select class="form-select" id="statusFilter">
+                        <option value="all">Todos los estados</option>
+                        <option value="active">Solo activas</option>
+                        <option value="inactive">Solo inactivas</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tarjetas de Categorías -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card category-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title text-muted">Total Categorías</h6>
+                            <h2 th:text="${#lists.size(categorias)}" class="text-primary">0</h2>
+                        </div>
+                        <i class="fas fa-tags text-primary fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card category-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title text-muted">Categorías Activas</h6>
+                            <h2 th:text="${#lists.size(categorias.?[activo == true])}" class="text-success">0</h2>
+                        </div>
+                        <i class="fas fa-check-circle text-success fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card category-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title text-muted">Categorías Inactivas</h6>
+                            <h2 th:text="${#lists.size(categorias.?[activo == false])}" class="text-danger">0</h2>
+                        </div>
+                        <i class="fas fa-ban text-danger fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Categorías -->
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th>Productos Asociados</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="categoria : ${categorias}">
+                        <td th:text="${categoria.id}">1</td>
+                        <td th:text="${categoria.nombre}">Panes</td>
+                        <td th:text="${categoria.descripcion}">Variedad de panes frescos</td>
+                        <td>
+                            <span th:if="${categoria.activo}" class="badge bg-success status-badge">Activo</span>
+                            <span th:unless="${categoria.activo}" class="badge bg-danger status-badge">Inactivo</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-info">12 productos</span>
+                        </td>
+                        <td class="table-actions">
+                            <button class="btn btn-sm btn-outline-warning me-1"
+                                    th:onclick="|editarCategoria(${categoria.id})|">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <form th:action="@{/gestion-categorias/{id}/cambiar-estado(id=${categoria.id})}" method="post" style="display: inline;">
+                                <button th:if="${categoria.activo}" type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="fas fa-ban"></i> Desactivar
+                                </button>
+                                <button th:unless="${categoria.activo}" type="submit" class="btn btn-sm btn-outline-success">
+                                    <i class="fas fa-check"></i> Activar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mensaje si no hay categorías -->
+            <div th:if="${#lists.isEmpty(categorias)}" class="text-center py-4">
+                <i class="fas fa-tags fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No hay categorías registradas</h4>
+                <p class="text-muted">Comienza agregando tu primera categoría.</p>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevaCategoriaModal">
+                    <i class="fas fa-plus"></i> Agregar Primera Categoría
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nueva Categoría -->
+<div class="modal fade" id="nuevaCategoriaModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-plus"></i> Nueva Categoría</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formNuevaCategoria">
+                    <div class="mb-3">
+                        <label for="nombreCategoria" class="form-label">Nombre de la Categoría *</label>
+                        <input type="text" class="form-control" id="nombreCategoria" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcionCategoria" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcionCategoria" rows="3"></textarea>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="categoriaActiva" checked>
+                        <label class="form-check-label" for="categoriaActiva">
+                            Categoría activa
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarCategoria()">Guardar Categoría</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container text-center">
+        <p>&copy; 2025 Panadería Delicia. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Filtrado y búsqueda
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const statusFilter = document.getElementById('statusFilter');
+        const tableRows = document.querySelectorAll('tbody tr');
+
+        function filterTable() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const statusValue = statusFilter.value;
+
+            tableRows.forEach(row => {
+                const nombre = row.cells[1].textContent.toLowerCase();
+                const descripcion = row.cells[2].textContent.toLowerCase();
+                const estado = row.cells[3].textContent.trim();
+
+                const matchesSearch = nombre.includes(searchTerm) || descripcion.includes(searchTerm);
+                const matchesStatus = statusValue === 'all' ||
+                    (statusValue === 'active' && estado === 'Activo') ||
+                    (statusValue === 'inactive' && estado === 'Inactivo');
+
+                if (matchesSearch && matchesStatus) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        searchInput.addEventListener('input', filterTable);
+        statusFilter.addEventListener('change', filterTable);
+    });
+
+    function editarCategoria(id) {
+        // Simulación de edición
+        alert('Editando categoría ID: ' + id + '\n\nEn una aplicación real, esto abriría un formulario de edición.');
+    }
+
+    function guardarCategoria() {
+        const nombre = document.getElementById('nombreCategoria').value;
+        const descripcion = document.getElementById('descripcionCategoria').value;
+        const activa = document.getElementById('categoriaActiva').checked;
+
+        if (!nombre) {
+            alert('Por favor, ingresa el nombre de la categoría.');
+            return;
+        }
+
+        // Simulación de guardado
+        alert('Guardando nueva categoría:\n\n' +
+            'Nombre: ' + nombre + '\n' +
+            'Descripción: ' + descripcion + '\n' +
+            'Estado: ' + (activa ? 'Activa' : 'Inactiva') +
+            '\n\nEn una aplicación real, esto enviaría los datos al servidor.');
+
+        // Cerrar modal y limpiar formulario
+        const modal = bootstrap.Modal.getInstance(document.getElementById('nuevaCategoriaModal'));
+        modal.hide();
+        document.getElementById('formNuevaCategoria').reset();
+    }
+</script>
+</body>
+</html>

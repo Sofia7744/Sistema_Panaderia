@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promociones - Panadería Delicia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .promo-card {
+            transition: transform 0.3s;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .promo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+        .badge-promo {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.8em;
+        }
+        .hero-promo {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-bread-slice"></i> Panadería Delicia
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/productos}">Productos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/promociones}">Promociones</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="compraDropdown" role="button" data-bs-toggle="dropdown">
+                        Compra
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/nueva-compra}">Nueva Compra</a></li>
+                        <li><a class="dropdown-item" th:href="@{/mis-compras}">Mis Compras</a></li>
+                    </ul>
+                </li>
+                <!-- Menú para Personal -->
+                <li class="nav-item dropdown" th:if="${usuario != null && usuario.rol == T(com.panaderiadelicia.entity.Usuario.Rol).PERSONAL}">
+                    <a class="nav-link dropdown-toggle text-warning" href="#" id="gestionDropdown" role="button" data-bs-toggle="dropdown">
+                        Gestión
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/gestion-productos}">Productos</a></li>
+                        <li><a class="dropdown-item" th:href="@{/gestion-categorias}">Categorías</a></li>
+                        <li><a class="dropdown-item" th:href="@{/gestion-usuarios}">Usuarios</a></li>
+                        <li><a class="dropdown-item" th:href="@{/gestion-compras}">Compras</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item" th:if="${usuario != null && usuario.rol == T(com.panaderiadelicia.entity.Usuario.Rol).PERSONAL}">
+                    <a class="nav-link text-info" th:href="@{/metricas}">Métricas</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item" th:if="${usuario == null}">
+                    <a class="nav-link" th:href="@{/login}">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                    </a>
+                </li>
+                <li class="nav-item dropdown" th:if="${usuario != null}">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user"></i> <span th:text="${usuario.nombre}">Usuario</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/mi-perfil}">Mi Perfil</a></li>
+                        <li><a class="dropdown-item" th:href="@{/mis-compras}">Mis Compras</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section Promociones -->
+<section class="hero-promo py-5">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-4">¡Promociones Especiales!</h1>
+        <p class="lead mb-4">Disfruta de nuestras mejores ofertas y descuentos exclusivos</p>
+        <a th:href="@{/nueva-compra}" class="btn btn-light btn-lg">
+            <i class="fas fa-bolt"></i> Aprovechar Ofertas
+        </a>
+    </div>
+</section>
+
+<!-- Promociones Destacadas -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Ofertas Destacadas</h2>
+        <div class="row">
+            <!-- Promoción 1 -->
+            <div class="col-md-4 mb-4">
+                <div class="card promo-card h-100">
+                    <div class="position-relative">
+                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                             class="card-img-top" alt="Promoción 1" style="height: 200px; object-fit: cover;">
+                        <span class="badge bg-danger badge-promo">-20%</span>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Martes de Panadería</h5>
+                        <p class="card-text flex-grow-1">Todos los martes disfruta de 20% de descuento en toda nuestra variedad de panes artesanales.</p>
+                        <div class="mt-auto">
+                            <p class="text-muted"><small><i class="fas fa-calendar"></i> Válido todos los martes</small></p>
+                            <a th:href="@{/nueva-compra}" class="btn btn-primary w-100">
+                                <i class="fas fa-shopping-cart"></i> Aprovechar Oferta
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Promoción 2 -->
+            <div class="col-md-4 mb-4">
+                <div class="card promo-card h-100">
+                    <div class="position-relative">
+                        <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                             class="card-img-top" alt="Promoción 2" style="height: 200px; object-fit: cover;">
+                        <span class="badge bg-success badge-promo">2x1</span>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Jueves de Pasteles</h5>
+                        <p class="card-text flex-grow-1">Los jueves por la tarde, llévate el segundo pastel igual o de menor valor completamente gratis.</p>
+                        <div class="mt-auto">
+                            <p class="text-muted"><small><i class="fas fa-calendar"></i> Jueves de 2pm a 8pm</small></p>
+                            <a th:href="@{/nueva-compra}" class="btn btn-primary w-100">
+                                <i class="fas fa-shopping-cart"></i> Aprovechar Oferta
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Promoción 3 -->
+            <div class="col-md-4 mb-4">
+                <div class="card promo-card h-100">
+                    <div class="position-relative">
+                        <img src="https://images.unsplash.com/photo-1558961364-13b9c3c555c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                             class="card-img-top" alt="Promoción 3" style="height: 200px; object-fit: cover;">
+                        <span class="badge bg-warning badge-promo">-30%</span>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Fin de Semana Familiar</h5>
+                        <p class="card-text flex-grow-1">Sábados y domingos, 30% de descuento en compras mayores a S/ 50. Ideal para compartir en familia.</p>
+                        <div class="mt-auto">
+                            <p class="text-muted"><small><i class="fas fa-calendar"></i> Sábados y domingos</small></p>
+                            <a th:href="@{/nueva-compra}" class="btn btn-primary w-100">
+                                <i class="fas fa-shopping-cart"></i> Aprovechar Oferta
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Ofertas de Temporada -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Ofertas de Temporada</h2>
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-gift fa-3x text-primary"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5 class="card-title">Cumpleaños Especial</h5>
+                                <p class="card-text">En tu mes de cumpleaños recibe 25% de descuento en tu compra total. Presenta tu DNI.</p>
+                                <small class="text-muted"><i class="fas fa-info-circle"></i> Válido durante todo el mes de cumpleaños</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-coffee fa-3x text-success"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5 class="card-title">Combo Desayuno</h5>
+                                <p class="card-text">Pan + Café + Jugo natural por solo S/ 15.90. Perfecto para empezar el día con energía.</p>
+                                <small class="text-muted"><i class="fas fa-clock"></i> Disponible de 6am a 11am</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4">
+    <div class="container text-center">
+        <p>&copy; 2025 Panadería Delicia. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

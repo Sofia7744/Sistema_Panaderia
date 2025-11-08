@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios - Panadería Delicia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .status-badge {
+            font-size: 0.8em;
+        }
+        .table-actions {
+            white-space: nowrap;
+        }
+        .role-badge {
+            font-size: 0.75em;
+        }
+        .user-card {
+            border-left: 4px solid #0d6efd;
+            transition: transform 0.2s;
+        }
+        .user-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-bread-slice"></i> Panadería Delicia
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/productos}">Productos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/promociones}">Promociones</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="compraDropdown" role="button" data-bs-toggle="dropdown">
+                        Compra
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/nueva-compra}">Nueva Compra</a></li>
+                        <li><a class="dropdown-item" th:href="@{/mis-compras}">Mis Compras</a></li>
+                    </ul>
+                </li>
+                <!-- Menú para Personal -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle active text-warning" href="#" id="gestionDropdown" role="button" data-bs-toggle="dropdown">
+                        Gestión
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/gestion-productos}">Productos</a></li>
+                        <li><a class="dropdown-item" th:href="@{/gestion-categorias}">Categorías</a></li>
+                        <li><a class="dropdown-item active" th:href="@{/gestion-usuarios}">Usuarios</a></li>
+                        <li><a class="dropdown-item" th:href="@{/gestion-compras}">Compras</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-info" th:href="@{/metricas}">Métricas</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-user"></i> <span th:text="${usuario != null ? usuario.nombre : 'Personal'}">Personal</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" th:href="@{/mi-perfil}">Mi Perfil</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Cerrar Sesión</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenido Principal -->
+<div class="container mt-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1><i class="fas fa-users"></i> Gestión de Usuarios</h1>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoUsuarioModal">
+            <i class="fas fa-user-plus"></i> Nuevo Usuario
+        </button>
+    </div>
+
+    <!-- Filtros y Búsqueda -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                        <input type="text" class="form-control" id="searchInput" placeholder="Buscar usuarios...">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select" id="roleFilter">
+                        <option value="all">Todos los roles</option>
+                        <option value="PERSONAL">Personal</option>
+                        <option value="CLIENTE">Clientes</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-select" id="statusFilter">
+                        <option value="all">Todos los estados</option>
+                        <option value="active">Solo activos</option>
+                        <option value="inactive">Solo inactivos</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tarjetas de Estadísticas -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="card user-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title text-muted">Total Usuarios</h6>
+                            <h2 th:text="${#lists.size(usuarios)}" class="text-primary">0</h2>
+                        </div>
+                        <i class="fas fa-users text-primary fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card user-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title text-muted">Personal</h6>
+                            <h2 th:text="${#lists.size(usuarios.?[rol.name() == 'PERSONAL'])}" class="text-warning">0</h2>
+                        </div>
+                        <i class="fas fa-user-tie text-warning fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card user-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title text-muted">Clientes</h6>
+                            <h2 th:text="${#lists.size(usuarios.?[rol.name() == 'CLIENTE'])}" class="text-info">0</h2>
+                        </div>
+                        <i class="fas fa-user text-info fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card user-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title text-muted">Inactivos</h6>
+                            <h2 th:text="${#lists.size(usuarios.?[activo == false])}" class="text-danger">0</h2>
+                        </div>
+                        <i class="fas fa-user-slash text-danger fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Usuarios -->
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="usuario : ${usuarios}">
+                        <td th:text="${usuario.id}">1</td>
+                        <td th:text="${usuario.nombre}">Juan Pérez</td>
+                        <td th:text="${usuario.email}">juan@email.com</td>
+                        <td th:text="${usuario.telefono}">987654321</td>
+                        <td>
+                                    <span th:if="${usuario.rol.name() == 'PERSONAL'}"
+                                          class="badge bg-warning role-badge">PERSONAL</span>
+                            <span th:if="${usuario.rol.name() == 'CLIENTE'}"
+                                  class="badge bg-info role-badge">CLIENTE</span>
+                        </td>
+                        <td>
+                            <span th:if="${usuario.activo}" class="badge bg-success status-badge">Activo</span>
+                            <span th:unless="${usuario.activo}" class="badge bg-danger status-badge">Inactivo</span>
+                        </td>
+                        <td class="table-actions">
+                            <button class="btn btn-sm btn-outline-warning me-1"
+                                    th:onclick="|editarUsuario(${usuario.id})|">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <form th:action="@{/gestion-usuarios/{id}/cambiar-estado(id=${usuario.id})}" method="post" style="display: inline;">
+                                <button th:if="${usuario.activo}" type="submit" class="btn btn-sm btn-outline-danger">
+                                    <i class="fas fa-ban"></i> Desactivar
+                                </button>
+                                <button th:unless="${usuario.activo}" type="submit" class="btn btn-sm btn-outline-success">
+                                    <i class="fas fa-check"></i> Activar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Mensaje si no hay usuarios -->
+            <div th:if="${#lists.isEmpty(usuarios)}" class="text-center py-4">
+                <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No hay usuarios registrados</h4>
+                <p class="text-muted">Comienza agregando el primer usuario.</p>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevoUsuarioModal">
+                    <i class="fas fa-user-plus"></i> Agregar Primer Usuario
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Nuevo Usuario -->
+<div class="modal fade" id="nuevoUsuarioModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-user-plus"></i> Nuevo Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formNuevoUsuario">
+                    <div class="mb-3">
+                        <label for="nombreUsuario" class="form-label">Nombre Completo *</label>
+                        <input type="text" class="form-control" id="nombreUsuario" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emailUsuario" class="form-label">Email *</label>
+                        <input type="email" class="form-control" id="emailUsuario" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="passwordUsuario" class="form-label">Contraseña *</label>
+                        <input type="password" class="form-control" id="passwordUsuario" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="telefonoUsuario" class="form-label">Teléfono</label>
+                        <input type="tel" class="form-control" id="telefonoUsuario">
+                    </div>
+                    <div class="mb-3">
+                        <label for="rolUsuario" class="form-label">Rol *</label>
+                        <select class="form-select" id="rolUsuario" required>
+                            <option value="">Seleccionar rol</option>
+                            <option th:each="rol : ${roles}"
+                                    th:value="${rol}"
+                                    th:text="${rol}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="usuarioActivo" checked>
+                        <label class="form-check-label" for="usuarioActivo">
+                            Usuario activo
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="guardarUsuario()">Guardar Usuario</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container text-center">
+        <p>&copy; 2025 Panadería Delicia. Todos los derechos reservados.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Filtrado y búsqueda
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const roleFilter = document.getElementById('roleFilter');
+        const statusFilter = document.getElementById('statusFilter');
+        const tableRows = document.querySelectorAll('tbody tr');
+
+        function filterTable() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const roleValue = roleFilter.value;
+            const statusValue = statusFilter.value;
+
+            tableRows.forEach(row => {
+                const nombre = row.cells[1].textContent.toLowerCase();
+                const email = row.cells[2].textContent.toLowerCase();
+                const rol = row.cells[4].textContent.trim();
+                const estado = row.cells[5].textContent.trim();
+
+                const matchesSearch = nombre.includes(searchTerm) || email.includes(searchTerm);
+                const matchesRole = roleValue === 'all' || rol === roleValue;
+                const matchesStatus = statusValue === 'all' ||
+                    (statusValue === 'active' && estado === 'Activo') ||
+                    (statusValue === 'inactive' && estado === 'Inactivo');
+
+                if (matchesSearch && matchesRole && matchesStatus) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        searchInput.addEventListener('input', filterTable);
+        roleFilter.addEventListener('change', filterTable);
+        statusFilter.addEventListener('change', filterTable);
+    });
+
+    function editarUsuario(id) {
+        // Simulación de edición
+        alert('Editando usuario ID: ' + id + '\n\nEn una aplicación real, esto abriría un formulario de edición.');
+    }
+
+    function guardarUsuario() {
+        const nombre = document.getElementById('nombreUsuario').value;
+        const email = document.getElementById('emailUsuario').value;
+        const password = document.getElementById('passwordUsuario').value;
+        const telefono = document.getElementById('telefonoUsuario').value;
+        const rol = document.getElementById('rolUsuario').value;
+        const activo = document.getElementById('usuarioActivo').checked;
+
+        if (!nombre || !email || !password || !rol) {
+            alert('Por favor, completa todos los campos obligatorios (*).');
+            return;
+        }
+
+        // Simulación de guardado
+        alert('Guardando nuevo usuario:\n\n' +
+            'Nombre: ' + nombre + '\n' +
+            'Email: ' + email + '\n' +
+            'Rol: ' + rol + '\n' +
+            'Estado: ' + (activo ? 'Activo' : 'Inactivo') +
+            '\n\nEn una aplicación real, esto enviaría los datos al servidor.');
+
+        // Cerrar modal y limpiar formulario
+        const modal = bootstrap.Modal.getInstance(document.getElementById('nuevoUsuarioModal'));
+        modal.hide();
+        document.getElementById('formNuevoUsuario').reset();
+    }
+</script>
+</body>
+</html>
